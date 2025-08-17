@@ -1,0 +1,191 @@
+[gd_scene load_steps=12 format=3 uid="uid://dauo3ajw7yvgu"]
+
+[ext_resource type="Script" uid="uid://b65f37p3nbjq3" path="res://scenes/game.gd" id="1_ibkli"]
+[ext_resource type="Script" uid="uid://dpet0y1lrl6j5" path="res://scenes/character_menu.gd" id="2_cpr0p"]
+[ext_resource type="Script" uid="uid://be8ljbea1tt68" path="res://scenes/Player.gd" id="2_qbsmt"]
+[ext_resource type="PackedScene" uid="uid://cbhngaxqogp7v" path="res://scenes/terrain.tscn" id="4_78awf"]
+[ext_resource type="Script" uid="uid://cxrlqb1h2vdi6" path="res://scenes/PauseMenu.gd" id="5_s0nni"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qbsmt"]
+albedo_color = Color(1, 0.160784, 1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_cpr0p"]
+material = SubResource("StandardMaterial3D_qbsmt")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_78awf"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_s0nni"]
+
+[sub_resource type="Environment" id="Environment_cpr0p"]
+background_mode = 2
+ambient_light_color = Color(0.877616, 0.877616, 0.877616, 1)
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_78awf"]
+
+[node name="Game" type="Node3D"]
+script = ExtResource("1_ibkli")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_cpr0p")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="save" type="Button" parent="CanvasLayer/Control"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 100.0
+offset_bottom = 41.0
+text = "SaveGame"
+
+[node name="inventory" type="Button" parent="CanvasLayer/Control"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 0
+offset_left = 10.0
+offset_top = 40.0
+offset_right = 93.0
+offset_bottom = 71.0
+text = "Inventory"
+
+[node name="ShowMenuButton" type="Button" parent="CanvasLayer/Control"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 0
+offset_left = 10.0
+offset_top = 70.0
+offset_right = 57.0
+offset_bottom = 101.0
+text = "Stats"
+
+[node name="player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("2_qbsmt")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="player"]
+shape = SubResource("CapsuleShape3D_78awf")
+debug_color = Color(0.704676, 0.485117, 0.179291, 0.42)
+debug_fill = false
+
+[node name="player_MeshInstance3D" type="MeshInstance3D" parent="player"]
+mesh = SubResource("CapsuleMesh_s0nni")
+
+[node name="Pivot" type="Node3D" parent="player"]
+
+[node name="Camera3D" type="Camera3D" parent="player/Pivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.8, 4)
+current = true
+
+[node name="CharacterMenu" type="CanvasLayer" parent="."]
+script = ExtResource("2_cpr0p")
+
+[node name="Panel" type="Panel" parent="CharacterMenu"]
+custom_minimum_size = Vector2(100, 100)
+offset_left = 10.0
+offset_top = 100.0
+offset_right = 110.0
+offset_bottom = 200.0
+
+[node name="StatsLabel" type="Label" parent="CharacterMenu/Panel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="InventoryLabel" type="Label" parent="CharacterMenu/Panel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707107, -0.353553, 0.612373, 0, 0.866026, 0.5, -0.707107, -0.353553, 0.612373, 0, 0, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_cpr0p")
+camera_attributes = SubResource("CameraAttributesPractical_78awf")
+
+[node name="Terrain" parent="." instance=ExtResource("4_78awf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="PauseMenu" type="CanvasLayer" parent="."]
+script = ExtResource("5_s0nni")
+
+[node name="Control" type="Control" parent="PauseMenu"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Panel" type="Panel" parent="PauseMenu/Control"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Paused" type="Label" parent="PauseMenu/Control/Panel"]
+layout_mode = 0
+offset_left = 500.0
+offset_top = 200.0
+offset_right = 557.0
+offset_bottom = 223.0
+text = "Paused"
+
+[node name="MainMenu" type="TextureButton" parent="PauseMenu/Control/Panel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Load" type="TextureButton" parent="PauseMenu/Control/Panel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Resume" type="TextureButton" parent="PauseMenu/Control/Panel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Save" type="TextureButton" parent="PauseMenu/Control/Panel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Settings" type="TextureButton" parent="PauseMenu/Control/Panel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MainMenu" type="CanvasLayer" parent="."]
+
+[node name="Node3D" type="Node3D" parent="MainMenu"]
+
+[node name="Startgame" type="Button" parent="MainMenu/Node3D"]
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="Quit" type="Button" parent="MainMenu/Node3D"]
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="PlayerHUD" type="CanvasLayer" parent="."]
+
+[node name="HUDBase" type="TextureRect" parent="PlayerHUD"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HP Bar" type="TextureProgressBar" parent="PlayerHUD/HUDBase"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MP Bar" type="TextureProgressBar" parent="PlayerHUD/HUDBase"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="PlayerHUD/HUDBase"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://cadmhq6vrbfla"]
+
+[node name="MainMenu" type="Node2D"]
+
+[node name="Game" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Game"]
